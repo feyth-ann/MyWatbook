@@ -1,0 +1,7 @@
+{
+  "name": "WatBook",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

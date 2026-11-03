@@ -1,5 +1,7 @@
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 import { Tab2PageModule } from './tab2.module';
 import { Tab2Page } from './tab2.page';

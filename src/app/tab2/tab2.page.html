@@ -1,17 +1,118 @@
-<ion-header [translucent]="true">
+
+<ion-header class="add-header">
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <div class="header-content">
+      <div class="brand">
+        <div class="brand-icon">
+          <ion-icon name="book"></ion-icon>
+        </div>
+        <span>WatBook</span>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="add-content">
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <div class="hero-section">
+    <p class="eyebrow">YOUR PERSONAL LIBRARY</p>
+    <h1>Add something <span>new.</span></h1>
+    <p>Every great collection starts with one book.</p>
+  </div>
+
+  <div class="form-container">
+
+    <div class="form-intro">
+      <div>
+        <h2>Book Details</h2>
+        <p>Enter the information below.</p>
+      </div>
+
+      <div class="form-icon">
+        <ion-icon name="book-outline"></ion-icon>
+      </div>
+    </div>
+
+    <div class="form-card">
+
+      <div class="form-group">
+        <ion-input
+          label="Book Title"
+          labelPlacement="stacked"
+          placeholder="e.g. The Great Gatsby"
+          fill="outline"
+          [(ngModel)]="book.title">
+        </ion-input>
+      </div>
+
+      <div class="form-group">
+        <ion-input
+          label="Author"
+          labelPlacement="stacked"
+          placeholder="Enter author's name"
+          fill="outline"
+          [(ngModel)]="book.author">
+        </ion-input>
+      </div>
+
+      <div class="form-group">
+        <ion-select
+          label="Category"
+          labelPlacement="stacked"
+          placeholder="Choose a category"
+          fill="outline"
+          interface="alert"
+          [(ngModel)]="book.category">
+
+          <ion-select-option value="fiction">Fiction</ion-select-option>
+          <ion-select-option value="romance">Romance</ion-select-option>
+          <ion-select-option value="mystery">Mystery</ion-select-option>
+          <ion-select-option value="fantasy">Fantasy</ion-select-option>
+          <ion-select-option value="science">Science</ion-select-option>
+          <ion-select-option value="technology">Technology</ion-select-option>
+          <ion-select-option value="education">Education</ion-select-option>
+          <ion-select-option value="other">Other</ion-select-option>
+
+        </ion-select>
+      </div>
+
+      <div class="form-group">
+        <ion-textarea
+          label="Description"
+          labelPlacement="stacked"
+          placeholder="Write a short description about this book..."
+          [autoGrow]="true"
+          rows="4"
+          fill="outline"
+          [(ngModel)]="book.description">
+        </ion-textarea>
+      </div>
+
+      <div class="required-note">
+        <span>*</span> Title, Author, and Category are required.
+      </div>
+
+      <ion-button
+        expand="block"
+        class="save-button"
+        (click)="saveBook()"
+        [disabled]="saving">
+
+        <ion-icon
+          [name]="saving ? 'hourglass-outline' : 'add-circle-outline'"
+          slot="start">
+        </ion-icon>
+
+        {{ saving ? 'Saving Book...' : 'Add to My Collection' }}
+
+      </ion-button>
+
+    </div>
+
+    <div class="bottom-note">
+      Your personal library, organized in one place.
+    </div>
+
+  </div>
+
 </ion-content>

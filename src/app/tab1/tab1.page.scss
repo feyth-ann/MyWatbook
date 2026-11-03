@@ -1,0 +1,315 @@
+
+:host {
+  --navy: #172b4d;
+  --navy-light: #263f68;
+  --orange: #efa66f;
+  --cream: #f7f4ef;
+  --soft-blue: #dce5f3;
+}
+
+.main-header {
+  ion-toolbar {
+    --background: var(--navy);
+    --color: white;
+    --padding-start: 20px;
+    --padding-end: 20px;
+  }
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 60px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 21px;
+  font-weight: 800;
+  color: white;
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--navy-light);
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.profile-button {
+  --color: white;
+  font-size: 25px;
+}
+
+.books-content {
+  --background: var(--cream);
+}
+
+.welcome-section {
+  padding: 32px 22px 25px;
+  background: var(--navy);
+  border-radius: 0 0 26px 26px;
+}
+
+.eyebrow {
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+
+.welcome-section h1 {
+  color: white;
+  font-size: 29px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 12px;
+  max-width: 450px;
+}
+
+.welcome-section h1 span {
+  color: var(--orange);
+}
+
+.welcome-description {
+  color: #dce5f3;
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 430px;
+  margin: 0;
+}
+
+.search-wrapper {
+  padding: 20px 16px 8px;
+
+  ion-searchbar {
+    --background: #ffffff;
+    --border-radius: 14px;
+    --box-shadow: 0 3px 12px rgba(23, 43, 77, 0.06);
+    --placeholder-color: #9299a7;
+    --icon-color: var(--navy-light);
+    --color: var(--navy);
+    padding: 0;
+  }
+}
+
+.section-heading {
+  padding: 24px 22px 12px;
+
+  h2 {
+    color: var(--navy);
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  p {
+    color: #858b98;
+    font-size: 12px;
+    margin: 5px 0 0;
+  }
+}
+
+.stats-card {
+  display: flex;
+  align-items: center;
+  background: var(--soft-blue);
+  border: 1px solid #ced9e9;
+  border-radius: 18px;
+  padding: 20px 16px;
+  margin: 8px 20px 25px;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  ion-icon {
+    font-size: 27px;
+    color: var(--navy-light);
+  }
+
+  h3 {
+    color: var(--navy);
+    font-size: 21px;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  p {
+    color: #68778e;
+    font-size: 11px;
+    margin: 4px 0 0;
+  }
+}
+
+.stat-divider {
+  height: 40px;
+  width: 1px;
+  background: #bdcadd;
+}
+
+/* Reading Status Filter */
+.filter-wrapper {
+  padding: 0 16px 18px;
+}
+
+.filter-label {
+  color: #858b98;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0 5px 10px;
+}
+
+.filter-wrapper ion-segment {
+  --background: #e8e5df;
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.filter-wrapper ion-segment-button {
+  --color: #68778e;
+  --color-checked: white;
+  --indicator-color: var(--navy);
+  --border-radius: 9px;
+  min-width: max-content;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.books-grid {
+  padding: 0 16px 28px;
+}
+
+.book-card {
+  margin: 12px 0;
+  border-radius: 17px;
+  background: #fffdf9;
+  border: 1px solid #e9e2d8;
+  box-shadow: 0 4px 14px rgba(23, 43, 77, 0.06);
+  overflow: hidden;
+
+  ion-card-content {
+    padding: 18px;
+  }
+
+  h2 {
+    color: var(--navy);
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.4;
+    margin: 12px 0 5px;
+  }
+
+  ion-badge {
+    --background: #fce6d3;
+    --color: #995c31;
+    margin-top: 8px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+}
+
+.book-icon {
+  width: 46px;
+  height: 46px;
+  background: #fce6d3;
+  color: #b66e3e;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.book-author {
+  color: #858b98;
+  font-size: 13px;
+  margin: 0;
+}
+
+.book-description {
+  color: #6f7785;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 13px 0 16px;
+}
+
+.book-actions {
+  display: flex;
+  gap: 9px;
+  padding-top: 12px;
+  border-top: 1px solid #eee8df;
+
+  ion-button {
+    flex: 1;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    --border-radius: 9px;
+    --border-color: #d8a477;
+    --color: #a66a3d;
+  }
+
+  ion-button[color="danger"] {
+    --border-color: #dfb8ae;
+    --color: #a6534c;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 25px 28px 45px;
+  max-width: 420px;
+  margin: 0 auto;
+
+  h2 {
+    color: var(--navy);
+    font-size: 19px;
+    font-weight: 800;
+    margin-top: 17px;
+  }
+
+  p {
+    color: #858b98;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  ion-spinner {
+    color: var(--navy-light);
+  }
+
+  > ion-icon {
+    color: var(--navy-light);
+  }
+}
+
+.empty-icon {
+  width: 85px;
+  height: 85px;
+  border-radius: 25px;
+  background: #fce6d3;
+  color: #b66e3e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 42px;
+}

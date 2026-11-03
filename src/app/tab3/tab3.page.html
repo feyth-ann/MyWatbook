@@ -1,17 +1,176 @@
-<ion-header [translucent]="true">
+
+<ion-header class="manage-header">
   <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
+    <div class="header-content">
+      <div class="brand">
+        <div class="brand-icon">
+          <ion-icon name="book"></ion-icon>
+        </div>
+        <span>WatBook</span>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="manage-content">
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <div class="hero-section">
+    <p class="eyebrow">YOUR READING SPACE</p>
+    <h1>Manage your <span>library.</span></h1>
+    <p>Keep track of your books and reading progress.</p>
+  </div>
+
+  <div class="manage-container">
+
+    <div class="section-heading">
+      <div>
+        <h2>Library Overview</h2>
+        <p>Your collection at a glance.</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <div class="stat-icon navy-icon">
+          <ion-icon name="library-outline"></ion-icon>
+        </div>
+        <h3>{{ totalBooks }}</h3>
+        <p>Total Books</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon orange-icon">
+          <ion-icon name="book-outline"></ion-icon>
+        </div>
+        <h3>{{ currentlyReading }}</h3>
+        <p>Reading</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon green-icon">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+        </div>
+        <h3>{{ completedBooks }}</h3>
+        <p>Completed</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon blue-icon">
+          <ion-icon name="bookmark-outline"></ion-icon>
+        </div>
+        <h3>{{ toReadBooks }}</h3>
+        <p>To Read</p>
+      </div>
+
+    </div>
+
+    <div class="progress-card">
+      <div class="progress-heading">
+        <div>
+          <h2>Reading Progress</h2>
+          <p>Completed books in your collection</p>
+        </div>
+
+        <strong>{{ readingProgress }}%</strong>
+      </div>
+
+      <ion-progress-bar
+        [value]="readingProgress / 100"
+        class="reading-progress">
+      </ion-progress-bar>
+
+      <p class="progress-caption">
+        {{ completedBooks }} of {{ totalBooks }} books completed
+      </p>
+    </div>
+
+    <div class="section-heading books-heading">
+      <div>
+        <h2>Manage Books</h2>
+        <p>Update the reading status of your books.</p>
+      </div>
+    </div>
+
+    <div class="search-wrapper">
+      <ion-searchbar
+        placeholder="Search title or author"
+        [(ngModel)]="searchText">
+      </ion-searchbar>
+    </div>
+
+    <div class="loading-state" *ngIf="loading">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading your library...</p>
+    </div>
+
+    <div class="book-list"
+      *ngIf="!loading && filteredBooks.length > 0">
+
+      <div class="manage-book-card"
+        *ngFor="let book of filteredBooks">
+
+        <div class="book-details">
+          <div class="book-icon">
+            <ion-icon name="book-outline"></ion-icon>
+          </div>
+
+          <div class="book-info">
+            <h3>{{ book?.title || 'Untitled Book' }}</h3>
+            <p>By {{ book?.author || 'Unknown Author' }}</p>
+
+            <ion-badge>
+              {{ book?.category || 'Uncategorized' }}
+            </ion-badge>
+          </div>
+        </div>
+
+        <div class="status-control">
+          <label>Reading Status</label>
+
+          <ion-select
+            interface="popover"
+            [value]="book.readingStatus"
+            (ionChange)="updateReadingStatus(book, $event.detail.value)"
+            class="status-select">
+
+            <ion-select-option value="To Read">
+              To Read
+            </ion-select-option>
+
+            <ion-select-option value="Currently Reading">
+              Currently Reading
+            </ion-select-option>
+
+            <ion-select-option value="Completed">
+              Completed
+            </ion-select-option>
+
+          </ion-select>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="empty-state"
+      *ngIf="!loading && books.length === 0">
+
+      <ion-icon name="library-outline"></ion-icon>
+      <h2>Your library is empty</h2>
+      <p>Add books to your collection to manage your reading progress.</p>
+
+    </div>
+
+    <div class="empty-state"
+      *ngIf="!loading && books.length > 0 && filteredBooks.length === 0">
+
+      <ion-icon name="search-outline"></ion-icon>
+      <h2>No books found</h2>
+      <p>Try searching for another title or author.</p>
+
+    </div>
+
+  </div>
+
 </ion-content>

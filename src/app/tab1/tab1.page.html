@@ -1,17 +1,170 @@
-<ion-header [translucent]="true">
+
+<ion-header class="main-header">
   <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+    <div class="header-content">
+      <div class="brand">
+        <div class="brand-icon">
+          <ion-icon name="book"></ion-icon>
+        </div>
+        <span>WatBook</span>
+      </div>
+
+      <ion-button fill="clear" class="profile-button">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </ion-button>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="books-content">
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <div class="welcome-section">
+    <p class="eyebrow">YOUR PERSONAL LIBRARY</p>
+    <h1>Discover your next <span>favorite book.</span></h1>
+    <p class="welcome-description">
+      Keep your collection organized and all your favorite reads in one place.
+    </p>
+  </div>
+
+  <div class="search-wrapper">
+    <ion-searchbar
+      placeholder="Search title or author"
+      [(ngModel)]="searchText">
+    </ion-searchbar>
+  </div>
+
+  <div class="section-heading">
+    <div>
+      <h2>My Collection</h2>
+      <p>Your saved books</p>
+    </div>
+  </div>
+
+  <div class="stats-card">
+    <div class="stat-item">
+      <ion-icon name="library-outline"></ion-icon>
+      <div>
+        <h3>{{ books.length }}</h3>
+        <p>Total Books</p>
+      </div>
+    </div>
+
+    <div class="stat-divider"></div>
+
+    <div class="stat-item">
+      <ion-icon name="bookmark-outline"></ion-icon>
+      <div>
+        <h3>{{ getCategoryCount() }}</h3>
+        <p>Categories</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reading Status Filter -->
+  <div class="filter-wrapper">
+    <p class="filter-label">FILTER BY READING STATUS</p>
+
+    <ion-segment
+      [(ngModel)]="statusFilter"
+      scrollable="true"
+      mode="md">
+
+      <ion-segment-button value="All">
+        <ion-label>All Books</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="To Read">
+        <ion-label>To Read</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="Currently Reading">
+        <ion-label>Reading</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="Completed">
+        <ion-label>Completed</ion-label>
+      </ion-segment-button>
+
+    </ion-segment>
+  </div>
+
+  <!-- Loading State -->
+  <div class="empty-state" *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading your books...</p>
+  </div>
+
+  <!-- Book List -->
+  <div class="books-grid" *ngIf="!loading && filteredBooks.length > 0">
+
+    <ion-card *ngFor="let book of filteredBooks" class="book-card">
+      <ion-card-content>
+
+        <div class="book-icon">
+          <ion-icon name="book-outline"></ion-icon>
+        </div>
+
+        <h2>{{ book?.title || 'Untitled Book' }}</h2>
+
+        <p class="book-author">
+          By {{ book?.author || 'Unknown Author' }}
+        </p>
+
+        <ion-badge color="primary">
+          {{ book?.category || 'Uncategorized' }}
+        </ion-badge>
+
+        <p class="book-description">
+          {{ book?.description || 'No description available.' }}
+        </p>
+
+        <div class="book-actions">
+          <ion-button
+            size="small"
+            fill="outline"
+            color="primary"
+            (click)="editBook(book)">
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            Edit
+          </ion-button>
+
+          <ion-button
+            size="small"
+            fill="outline"
+            color="danger"
+            (click)="deleteBook(book)">
+            <ion-icon name="trash-outline" slot="start"></ion-icon>
+            Delete
+          </ion-button>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <!-- Empty Library -->
+  <div class="empty-state" *ngIf="!loading && books.length === 0">
+    <div class="empty-icon">
+      <ion-icon name="book-outline"></ion-icon>
+    </div>
+
+    <h2>Your library is waiting!</h2>
+
+    <p>
+      You haven't added any books yet.
+      Start building your personal collection today.
+    </p>
+  </div>
+
+  <!-- No Search Results -->
+  <div
+    class="empty-state"
+    *ngIf="!loading && books.length > 0 && filteredBooks.length === 0">
+
+    <ion-icon name="search-outline" size="large"></ion-icon>
+    <h2>No books found</h2>
+    <p>Try another search or select a different reading status.</p>
+  </div>
+
 </ion-content>

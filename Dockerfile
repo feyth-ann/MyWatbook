@@ -1,9 +1,8 @@
 
-FROM node:22-alpine
+# Stage 1: Build Angular application
+FROM node:22-alpine AS build
 
 WORKDIR /app
-
-RUN npm install -g @ionic/cli
 
 COPY package*.json ./
 
@@ -11,6 +10,15 @@ RUN npm ci
 
 COPY . .
 
-EXPOSE 8100
+RUN npm run build
 
-CMD ["ionic", "serve", "--host=0.0.0.0", "--port=8100", "--no-open"]
+# Stage 2: Nginx production server
+FROM nginx:alpine
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=build /app/www /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

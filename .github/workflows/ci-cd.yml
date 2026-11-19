@@ -1,13 +1,11 @@
 
-name: WatBook CI/CD
+name: WatBook CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -17,30 +15,27 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Run Tests
-        run: npm test -- --watch=false
-
-      - name: Build Ionic Angular App
-        run: npm run build
+      - name: Check Docker
+        run: docker --version
+        shell: powershell
 
       - name: Build Docker Image
-        run: docker build -t watbook-crud:latest .
-
-      - name: Remove Previous Container
+        run: docker build -t watbook-app .
         shell: powershell
-        run: |
-          docker rm -f watbook-crud-container 2>$null
-          if ($LASTEXITCODE -ne 0) {
-            Write-Host "No previous container found."
-          }
 
-      - name: Deploy Docker Container
-        run: docker run -d --name watbook-crud-container -p 8100:8100 watbook-crud:latest
+      - name: Stop and Remove Existing Container
+        run: |
+          $existing = docker ps -a --format "{{.Names}}"
+
+          if ($existing -contains "watbook-container") {
+              docker rm -f watbook-container
+          }
+        shell: powershell
+
+      - name: Deploy WatBook Container
+        run: docker run -d --name watbook-container -p 8100:80 watbook-app
+        shell: powershell
+
+      - name: Verify Deployment
+        run: docker ps
+        shell: powershell

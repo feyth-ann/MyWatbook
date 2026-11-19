@@ -5,37 +5,99 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: watbook-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
-    runs-on: self-hosted
+  validate:
+    name: Validate application
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test -- --watch=false
+
+      - name: Build
+        run: npm run build
+
+  deploy:
+    name: Deploy application
+    needs: validate
+    if: github.event_name != 'pull_request'
+    runs-on: self-hosted
+
+    env:
+      IMAGE_NAME: watbook-app
+      CONTAINER_NAME: watbook-container
+
+    steps:
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Check Docker
         run: docker --version
         shell: powershell
 
-      - name: Build Docker Image
-        run: docker build -t watbook-app .
+      - name: Build Docker image
+        run: docker build --tag "${{ env.IMAGE_NAME }}:${{ github.sha }}" --tag "${{ env.IMAGE_NAME }}:latest" .
         shell: powershell
 
-      - name: Stop and Remove Existing Container
+      - name: Stop existing container
         run: |
           $existing = docker ps -a --format "{{.Names}}"
-
-          if ($existing -contains "watbook-container") {
-              docker rm -f watbook-container
+          if ($existing -contains "${{ env.CONTAINER_NAME }}") {
+            docker rm -f "${{ env.CONTAINER_NAME }}"
           }
         shell: powershell
 
-      - name: Deploy WatBook Container
-        run: docker run -d --name watbook-container -p 8100:80 watbook-app
+      - name: Start application container
+        run: |
+          docker run --detach --restart unless-stopped `
+            --name "${{ env.CONTAINER_NAME }}" `
+            --publish 8100:80 `
+            "${{ env.IMAGE_NAME }}:${{ github.sha }}"
         shell: powershell
 
-      - name: Verify Deployment
-        run: docker ps
+      - name: Verify deployment
+        run: |
+          $attempt = 0
+          while ($attempt -lt 10) {
+            try {
+              $response = Invoke-WebRequest -Uri "http://localhost:8100/" -UseBasicParsing -TimeoutSec 5
+              if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 300) {
+                docker ps --filter "name=^/${{ env.CONTAINER_NAME }}$"
+                exit 0
+              }
+            } catch {
+              Start-Sleep -Seconds 3
+            }
+            $attempt++
+          }
+
+          docker logs "${{ env.CONTAINER_NAME }}"
+          exit 1
         shell: powershell
